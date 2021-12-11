@@ -24,3 +24,15 @@ body {
 
   white-space: nowrap;
 }
+
+.labels-green {
+  color: white;
+  background-color: #52a531;
+  font-family: "Lucida Grande", "Arial", sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+
+
+  white-space: nowrap;
+}

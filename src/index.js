@@ -41,25 +41,29 @@ function drawRoute(jslocations,labels,labelOrigin,colorName,color,map){
   
   //Create the markers
   
-  
-  for( i = 0; i < coordinates.length; i++ ) {
-           
-    var positions = new google.maps.LatLng(coordinates[i]);
-    icon['labelOrigin']=labelOrigin[i]
-  
-    var marker = new MarkerWithLabel({
-      position:positions,
-      // icon: mapStyles.uavSymbolBlack,
-      icon:icon,
-      labelContent:labels[i],
-      labelAnchor: labelOrigin[i],
-      labelClass: "labels-"+colorName,
-      labelStyle: {
-          opacity: 0.75
-      },
-      zIndex: 999999,
-      map: map
-    })
+  let count=0;
+  for( i = 0; i < jslocations.length; i++ ) {
+     if(jslocations[i].station==true)  {
+      var positions = new google.maps.LatLng(jslocations[i]);
+
+      icon['labelOrigin']=labelOrigin[count]
+    
+      var marker = new MarkerWithLabel({
+        position:positions,
+        // icon: mapStyles.uavSymbolBlack,
+        icon:icon,
+        labelContent:labels[count],
+        labelAnchor: labelOrigin[count],
+        labelClass: "labels-"+colorName,
+        labelStyle: {
+            opacity: 0.75
+        },
+        zIndex: 999999,
+        map: map
+      })
+      count=count+1;
+     }    
+
   
   };
   
@@ -73,6 +77,21 @@ function drawRoute(jslocations,labels,labelOrigin,colorName,color,map){
      });
   
      LinePath.setMap(map);
+
+
+     LinePath.addListener("click", (mapsMouseEvent) => {
+
+      // Close the current InfoWindow.
+  
+      // Create a new InfoWindow.
+      let infoWindow = new google.maps.InfoWindow({
+        position: mapsMouseEvent.latLng,
+      });
+      infoWindow.setContent(
+        JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+      );
+      infoWindow.open(map);
+    });
   
   }
   
@@ -84,7 +103,26 @@ function initMap() {
     center: { lat: 24.731488, lng: 46.707267 },
   });
 
+  map.addListener("click", (mapsMouseEvent) => {
 
+    // Close the current InfoWindow.
+
+    // Create a new InfoWindow.
+    let infoWindow = new google.maps.InfoWindow({
+      position: mapsMouseEvent.latLng,
+    });
+    infoWindow.setContent(
+      JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+    );
+    infoWindow.open(map);
+  });
+
+
+  
+
+    // Configure the click listener.
+
+  
 //blue line
 
   const lanePathCoordinates = [
@@ -161,15 +199,60 @@ function initMap() {
 //------------------------------------------------------------------
 //purple line
 var jslocations =[
-  {lat:24.701386355433627, lng:46.829881768713584 },
-  {lat:24.747361796216303, lng:46.797889373643635},
-  {lat:24.77660830265986, lng:46.77744458960821},
-  {lat:24.793214958157993, lng:46.765599804146134},
-  {lat:24.786713414385222, lng:46.730128243579685},
-  {lat:24.807277811187728, lng:46.71105588351672},
-  {lat:24.800191798824756, lng:46.69383440815601},
-  {lat:24.786279,lng: 46.660531},
-  {lat:24.7673995, lng:46.643198},
+  {lat:24.701386355433627, lng:46.829881768713584 ,station:true},
+  {lat:24.747361796216303, lng:46.797889373643635,station:true},
+
+  { lat: 24.753265991550055, lng: 46.79316287248378,station:false },
+  { lat: 24.75540534217121, lng: 46.791629791259766 ,station:false},
+  { lat: 24.758030397849133, lng: 46.79045823515699,station:false },
+  { lat: 24.767529017284062, lng: 46.78286318986659 ,station:false},
+  { lat: 24.768464240441965, lng: 46.78217654435878,station:false },
+  { lat: 24.769165653188217, lng: 46.78157572953944 ,station:false},
+  { lat: 24.770646400419288, lng: 46.7806315919662,station:false },
+  { lat: 24.771581600098614, lng: 46.779944946458386,station:false },
+  { lat: 24.772828522046957, lng: 46.779000808885144 ,station:false},
+  {lat:24.77660830265986, lng:46.77744458960821,station:true},
+  {lat: 24.790982033805886, lng: 46.766830832251095,station:false },
+  {lat: 24.79129371674012, lng: 46.76648750949719,station:false },
+  {lat: 24.791527478426865, lng: 46.76623001743176,station:false },
+  {lat: 24.791995000478824, lng: 46.76588669467785 ,station:false},
+  {lat:24.793214958157993, lng:46.765599804146134,station:true},
+  { lat: 24.793124557329612, lng: 46.76512584336726 ,station:false},
+  { lat: 24.79308921739161, lng: 46.76491857799883,station:false },
+  { lat: 24.79303708647995, lng: 46.76461283527769,station:false },
+  { lat: 24.792980542534476, lng: 46.76428121068818 ,station:false},
+  { lat: 24.79291294808864, lng: 46.76388477621701 ,station:false},
+  { lat: 24.788579237028156, lng: 46.738766862670914,station:false },
+  { lat: 24.788423392248937, lng: 46.738251878540055,station:false },
+  { lat: 24.788384431023538, lng: 46.737736894409196 ,station:false},
+  { lat: 24.788384431023538, lng: 46.737264825622574 ,station:false},
+  { lat: 24.788267547273954, lng: 46.736749841491715,station:false },
+  { lat: 24.78822858599962, lng: 46.73619194201662,station:false },
+  { lat: 24.787955856736694, lng: 46.73584861926271,station:false },
+  { lat: 24.78783897258335, lng: 46.73529071978761 ,station:false},
+  { lat: 24.787761049753275, lng: 46.734775735656754,station:false },
+  { lat: 24.78768312687427, lng: 46.73434658221437,station:false },
+  { lat: 24.787566242463967, lng: 46.7337028520508 ,station:false},
+  { lat: 24.78744935794357, lng: 46.73318786791994 ,station:false},
+  { lat: 24.787137062289293, lng: 46.732389150104176,station:false },
+  { lat: 24.787137062289293, lng: 46.732389150104176,station:false },
+  { lat: 24.78701840514071, lng: 46.731711153735006,station:false },
+  { lat: 24.786917022987073, lng: 46.73113186566078,station:false },
+  {lat:24.786713414385222, lng:46.730128243579685,station:true},
+{ lat: 24.786751086345177, lng: 46.730002641994645,station:false },
+{ lat: 24.78685823109608, lng: 46.72994899781435,station:false },
+{ lat: 24.786906933225012, lng: 46.72987389596193 ,station:false},
+{ lat: 24.787004337425472, lng: 46.729777336437394,station:false },
+{ lat: 24.78734072103406, lng: 46.72955110457607 ,station:false},
+{ lat: 24.787374472689947, lng: 46.72944474251955,station:false },
+{ lat: 24.787403693848002, lng: 46.72938036950319,station:false },
+{ lat: 24.787491357280878, lng: 46.72930526765077,station:false },
+{ lat: 24.78756928028034, lng: 46.729219436962296,station:false },
+{ lat: 24.804984770984774, lng: 46.713168802311834,station:false },
+  {lat:24.807277811187728, lng:46.71105588351672,station:true},
+  {lat:24.800191798824756, lng:46.69383440815601,station:true},
+  {lat:24.786279,lng: 46.660531,station:true},
+  {lat: 24.76792624982181, lng: 46.64368043840547 ,station:true},
 
 
 
@@ -189,6 +272,68 @@ new google.maps.Point(-10, 10),new google.maps.Point(-28, -5),
 new google.maps.Point(10, 0)]
 
 drawRoute(jslocations,labels,labelOrigin,"purple","#991a7e",map);
+//----------------------
+
+
+
+//green line
+var jslocations =[
+  {lat: 24.64530273122771, lng: 46.71570998231822,station:true},
+  {lat: 24.645638415934847, lng: 46.71615255161291 ,station:false },
+  { lat: 24.646225404610654, lng: 46.71682633916422 ,station:false},
+  { lat: 24.64631197242046, lng: 46.716861485222125  ,station:false},
+  {lat: 24.64741273260203, lng: 46.716879845263655,station:false},
+  {lat: 24.64842686846677, lng: 46.71694421828001,station:false},
+  {lat: 24.649616517348264, lng: 46.716665268542464,station:false},
+  {lat: 24.650923167811847, lng: 46.71645069182127,station:false},
+  {lat: 24.652034785052646, lng: 46.71634340346068,station:false},
+  {lat:24.652755004875484, lng:46.716111560123416,station:true},
+  {lat:24.6784544889062, lng:46.71832814266125,station:true},
+  {lat:24.68657560389134, lng:46.71821834918483,station:true},
+  {lat:24.69763332233779, lng:46.71806251934823,station:true},
+  {lat:24.70606806622423, lng:46.71457730992477,station:true},
+  {lat:24.710643876278194, lng:46.7070047193485,station:true},
+  { lat: 24.710281573540016, lng: 46.705292894165055 ,station:false},
+  { lat: 24.71039853065271,lng: 46.70666353204645,station:false },
+  { lat: 24.710320559256452,lng: 46.7063845823089 ,station:false},
+  { lat: 24.710281573540016,lng: 46.706009073046815,station:false },
+  { lat: 24.710223094942464,lng: 46.70563356378473,station:false },
+  { lat: 24.71021334850688,lng: 46.70534388521112,station:false },
+  {lat: 24.711271785708025, lng: 46.70433749211263,station:false },
+  { lat: 24.71283119244174, lng: 46.70485247624349 ,station:false},
+  { lat: 24.714240060926514, lng: 46.7063763794868 ,station:false},
+  { lat: 24.71610588300336, lng: 46.707942381028644,station:false },
+  { lat: 24.717353361510323, lng: 46.70777071965169 ,station:false},
+  {lat: 24.719520846927995, lng: 46.707567407409684 ,station:false },
+  { lat: 24.729473236203553, lng: 46.704855572838184,station:false },
+  { lat: 24.72988590272596, lng: 46.705092744490265,station:false },
+  { lat: 24.731133243094387, lng: 46.70500691380179,station:false },
+  { lat: 24.732224655656672, lng: 46.70492108311331 ,station:false},
+  { lat: 24.73316014451658, lng: 46.70492108311331 ,station:false},
+  { lat: 24.73432949569711, lng: 46.70466359104788 ,station:false},
+  { lat: 24.735654747077824, lng: 46.70449192967093,station:false },
+  { lat: 24.738149299601965, lng: 46.70320446934378 ,station:false},
+  {lat:24.742620780251272, lng:46.70131266397654,station:true},
+
+
+
+  
+
+
+
+];
+var labels=['5A1','5A6','5A3','5B1','5B2','5B3','5B4','5C4']
+
+
+// offset to postion the lables
+var labelOrigin=[
+new google.maps.Point(10, 0),new google.maps.Point(12, -10),
+new google.maps.Point(-20, 10),new google.maps.Point(12, -5),
+new google.maps.Point(-10, 12),new google.maps.Point(-10, -23),
+new google.maps.Point(-10, 10),new google.maps.Point(-28, -5),
+new google.maps.Point(10, 0)]
+
+drawRoute(jslocations,labels,labelOrigin,"green","#52a531",map);
 //----------------------
 }
 export { initMap };
