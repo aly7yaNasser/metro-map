@@ -1,10 +1,91 @@
 import "./style.css";
 
+function drawRoute(jslocations,labels,labelOrigin,colorName,color,map){
+ 
+
+
+
+
+  //Create an empty array to store the coordinates from the JSON object above.
+    var coordinates = [];
+  
+  //For each line in the JSON object, pull out the longitude and latitude and add to the coordinates array.
+    for (i = 0; i < jslocations.length; i++) {
+  
+    var longitudes =jslocations[i].lng
+  
+        var latitudes = jslocations[i].lat
+        
+    coordinates.push({
+                lat: latitudes,
+                lng: longitudes
+                    });
+    }
+  
+  // Define a bound from the given coordinates from which we can center the map.
+
+  
+  //Create the svg marker icon
+  var icon = {
+    path: google.maps.SymbolPath.CIRCLE,
+    strokeOpacity: 1,
+    fillOpacity: 1,
+    scale: 7,
+    fillColor:"#ffffff",
+    strokeColor: color,
+    strokeOpacity: 1.0,
+    strokeWeight:5,
+    
+  
+  };
+  
+  //Create the markers
+  
+  
+  for( i = 0; i < coordinates.length; i++ ) {
+           
+    var positions = new google.maps.LatLng(coordinates[i]);
+    icon['labelOrigin']=labelOrigin[i]
+  
+    var marker = new MarkerWithLabel({
+      position:positions,
+      // icon: mapStyles.uavSymbolBlack,
+      icon:icon,
+      labelContent:labels[i],
+      labelAnchor: labelOrigin[i],
+      labelClass: "labels-"+colorName,
+      labelStyle: {
+          opacity: 0.75
+      },
+      zIndex: 999999,
+      map: map
+    })
+  
+  };
+  
+  //Create the polyline that connects the markers.
+  var LinePath = new google.maps.Polyline({
+    path: coordinates,
+    geodesic: true,
+    strokeColor: color,
+    strokeOpacity: 1.0,
+    strokeWeight: 7
+     });
+  
+     LinePath.setMap(map);
+  
+  }
+  
 function initMap() {
+
+
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 11,
     center: { lat: 24.731488, lng: 46.707267 },
   });
+
+
+//blue line
 
   const lanePathCoordinates = [
     { lat: 24.559763, lng: 46.776436 },
@@ -76,5 +157,38 @@ function initMap() {
   });
 
   LanePath.setMap(map);
+
+//------------------------------------------------------------------
+//purple line
+var jslocations =[
+  {lat:24.701386355433627, lng:46.829881768713584 },
+  {lat:24.747361796216303, lng:46.797889373643635},
+  {lat:24.77660830265986, lng:46.77744458960821},
+  {lat:24.793214958157993, lng:46.765599804146134},
+  {lat:24.786713414385222, lng:46.730128243579685},
+  {lat:24.807277811187728, lng:46.71105588351672},
+  {lat:24.800191798824756, lng:46.69383440815601},
+  {lat:24.786279,lng: 46.660531},
+  {lat:24.7673995, lng:46.643198},
+
+
+
+
+
+
+];
+var labels=['2A1','2A2','2A3','2B1','2B2','2B4','2C1','2C2','2C3','2D2','2E1','2E2','2F1','2G1']
+
+
+// offset to postion the lables
+var labelOrigin=[
+new google.maps.Point(10, 0),new google.maps.Point(12, -10),
+new google.maps.Point(-20, 10),new google.maps.Point(12, -5),
+new google.maps.Point(-10, 12),new google.maps.Point(-10, -23),
+new google.maps.Point(-10, 10),new google.maps.Point(-28, -5),
+new google.maps.Point(10, 0)]
+
+drawRoute(jslocations,labels,labelOrigin,"purple","#991a7e",map);
+//----------------------
 }
 export { initMap };
