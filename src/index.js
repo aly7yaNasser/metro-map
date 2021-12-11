@@ -587,7 +587,7 @@ new google.maps.Point(-10, 10),
 
 drawPolyAndRoute(orangeLineLocations, orangeStations, labels, labelOrigin, "orange", "#FFA500", map);
 
-//------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 }
 
